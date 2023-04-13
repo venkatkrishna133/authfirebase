@@ -296,7 +296,7 @@ const Detials = () => {
                 }}
               >
                 <div className="mb-3">
-                  <button type="save" className="btn btn-success">
+                  <button type="save" className="btn btn-success" onClick={PostData}>
                     Save
                   </button>
                 </div>
