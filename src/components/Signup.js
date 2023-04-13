@@ -24,8 +24,10 @@ const Signup = () => {
 
   return (
     <>
+    <br/><br/><br/><br/><br/><br/>
+      <div className="container" style={{ width: "500px" }}>
       <div className="p-4 box">
-        <h2 className="mb-3">Firebase Auth Signup</h2>
+        <h2 className="mb-3">Loyalty Auth Signup</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -50,9 +52,11 @@ const Signup = () => {
             </Button>
           </div>
         </Form>
+        <hr />
       </div>
       <div className="p-4 box mt-3 text-center">
         Already have an account? <Link to="/">Log In</Link>
+      </div>
       </div>
     </>
   );

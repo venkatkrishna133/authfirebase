@@ -1,0 +1,22 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 17px;
+    background-color: rgb(255, 255, 255);
+    padding: 0px;
+    border-radius: 10px;
+}
+.form > .container > h3::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 3px;
+    width: 27px;
+    background-color: #4070f4;
+
+}
