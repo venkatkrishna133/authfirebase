@@ -1,19 +1,52 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,useLocation } from "react-router-dom";
 import "./App.css";
-import Home from "./components/Home";
-import Detials from "./components/Detials";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Details from "./pages/Details";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
+import Dashboard from "./pages/Dashboard";
+import {Typography} from "antd";
+import SideMenu from "./components/SideMenu";
+import PageContent from "./components/PageContent";
+import AppHeader from "./components/AppHeader";
+import AppFotter from "./components/AppFotter";
+import AppRoutes from "./components/AppRoutes";
+
 
 function App() {
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+
   return (
+    
+    <>
+    <UserAuthContextProvider>
+      <Routes>
+      <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AppHeader/>
+                  
+                  <SideMenu/>
+                  <Container style={{marginTop:-180,marginRight:90}}>
+                  <Dashboard/>
+                  </Container>
+                  
+                </ProtectedRoute>
+              }
+              />
+      </Routes>
+    </UserAuthContextProvider>
+    
     <Container >
       <Row>
         <Col>
           <UserAuthContextProvider>
+          
             <Routes>
               <Route
                 path="/home"
@@ -24,15 +57,16 @@ function App() {
                 }
               />
               <Route
-                path="/detials"
+                path="/details"
                 element={
                   <ProtectedRoute>
-                    <Detials />
+                    <Details />
                   </ProtectedRoute>
                 }
               />
               
-              
+
+
               <Route path="/" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
             </Routes>
@@ -40,6 +74,7 @@ function App() {
         </Col>
       </Row>
     </Container>
+    </>
   );
 }
 

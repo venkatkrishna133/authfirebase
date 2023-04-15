@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
-// import "./Detials.css";
+import {useNavigate } from "react-router-dom";
+// import "./Details.css";
 import { Form, Alert, Stack } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import GoogleButton from "react-google-button";
 
-const Detials = () => {
+const Details = () => {
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
     
     uId:"",
@@ -63,7 +65,9 @@ const Detials = () => {
 
         }),
       }
+      
     );
+    navigate("/");
   };
 
   return (
@@ -287,7 +291,7 @@ const Detials = () => {
 
             <div className="row btnbot">
               <div
-                className="col-md-7"
+                className="col-md-13"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -297,14 +301,7 @@ const Detials = () => {
               >
                 <div className="mb-3">
                   <button type="save" className="btn btn-success" onClick={PostData}>
-                    Save
-                  </button>
-                </div>
-              </div>
-              <div className="col-md-5">
-                <div className="mb-3">
-                  <button type="reset" className="btn btn-danger">
-                    Reset
+                    Save & Next
                   </button>
                 </div>
               </div>
@@ -316,4 +313,4 @@ const Detials = () => {
   );
 };
 
-export default Detials;
+export default Details;
