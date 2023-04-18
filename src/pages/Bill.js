@@ -91,7 +91,7 @@ function Bill() {
               </td>
               <td>
                 <Space.Compact style={{ width: '100%' }}>
-                  <label>Enter the Invoice NO:<Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} /><Button type="primary" onClick={uploadFile}>Upload Image & Save </Button></label>
+                  <label>Enter the Invoice NO:<Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} /><br/>Enter the Dealer ID:<Input/><Button type="primary" onClick={uploadFile}>Upload Image & Save </Button></label>
 
 
                 </Space.Compact>

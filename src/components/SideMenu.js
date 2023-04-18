@@ -3,6 +3,7 @@ import {
     ShopOutlined,
     ShoppingCartOutlined,
     UserOutlined,
+    BellFilled
   } from "@ant-design/icons";
   import { Menu } from "antd";
   import { useEffect, useState } from "react";
@@ -48,9 +49,9 @@ import {
               icon: <ShoppingCartOutlined />,
             },
             {
-              label: "Customers",
-              key: "/customers",
-              icon: <UserOutlined />,
+              label: "Requests",
+              key: `/requests?email=${email}`,
+              icon: <BellFilled />,
             },
           ]}
         ></Menu>
