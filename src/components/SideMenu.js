@@ -38,13 +38,13 @@ import {
               key: `/dashboard?email=${email}`,
             },
             {
-              label: "Inventory",
-              key: "/inventory",
+              label: "Bill Entry",
+              key: `/bill?email=${email}`,
               icon: <ShopOutlined />,
             },
             {
-              label: "Orders",
-              key: "/orders",
+              label: "Transactions",
+              key: `/transactions?email=${email}`,
               icon: <ShoppingCartOutlined />,
             },
             {

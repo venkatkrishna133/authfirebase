@@ -14,6 +14,8 @@ import PageContent from "./components/PageContent";
 import AppHeader from "./components/AppHeader";
 import AppFotter from "./components/AppFotter";
 import AppRoutes from "./components/AppRoutes";
+import Bill from "./pages/Bill";
+import Transactions from "./pages/Transactions";
 
 
 function App() {
@@ -34,6 +36,42 @@ function App() {
                   <SideMenu/>
                   <Container style={{marginTop:-180,marginRight:90}}>
                   <Dashboard/>
+                  </Container>
+                  
+                </ProtectedRoute>
+              }
+              />
+      </Routes>
+    </UserAuthContextProvider>
+    <UserAuthContextProvider>
+      <Routes>
+      <Route
+              path="/bill"
+              element={
+                <ProtectedRoute>
+                  <AppHeader/>
+                  
+                  <SideMenu/>
+                  <Container style={{marginTop:-180,marginRight:90}}>
+                  <Bill/>
+                  </Container>
+                  
+                </ProtectedRoute>
+              }
+              />
+      </Routes>
+    </UserAuthContextProvider>
+    <UserAuthContextProvider>
+      <Routes>
+      <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <AppHeader/>
+                  
+                  <SideMenu/>
+                  <Container style={{marginTop:-180,marginRight:90}}>
+                  <Transactions/>
                   </Container>
                   
                 </ProtectedRoute>
