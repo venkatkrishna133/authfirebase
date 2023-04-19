@@ -16,16 +16,55 @@ function Bill() {
   const [previewImage, setPreviewImage] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
   const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [userId, setuserId] = useState("");
+  const [ammount, setAmount] = useState("");
   const [imgdetails, setImgDetails] = useState({
-    
-    uId:"",
-    uName: "",
-   
+
+    email: "",
+    invoiceNumber: "",
+    formattedDate: "",
+    formattedTime: "",
+    imgurl: "",
+    ammount: "",
+
 
   });
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
+  const PostData = async (e) => {
+    e.preventDefault();
+    alert("uploaded successfully");
+    const {
+      email,
+      invoiceNumber,
+      formattedDate,
+      formattedTime,
+      imgurl,
+      userId,
+      ammount, } = imgdetails;
 
+    const res = await fetch(
+      "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice.json",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+
+          email,
+          invoiceNumber,
+          formattedDate,
+          formattedTime,
+          imgurl,
+          userId,
+          ammount,
+
+        }),
+      }
+    );
+
+  };
   const uploadFile = () => {
     if (imageUpload == null) return;
     const currentDate = new Date();
@@ -34,15 +73,28 @@ function Bill() {
     console.log("Current Time:", formattedTime);
     console.log("Current Date and Time:", currentDate);
     console.log("Current Date:", formattedDate);
+    console.log(userId);
     const imageRef = ref(storage, `images/${email} ${invoiceNumber} ${formattedDate} ${formattedTime}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImageUrls((prev) => [...prev, url]);
+
+        // Call the PostData function after successful image upload
+        // Update imgdetails state with correct values
+        setImgDetails({
+          email: email,
+          invoiceNumber: invoiceNumber,
+          formattedDate: formattedDate,
+          formattedTime: formattedTime,
+          imgurl: url,
+          userId: userId,
+          ammount: ammount,
+
+        });
       });
     });
-    
-    
   };
+
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -91,9 +143,14 @@ function Bill() {
               </td>
               <td>
                 <Space.Compact style={{ width: '100%' }}>
-                  <label>Enter the Invoice NO:<Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} /><br/>Enter the Dealer ID:<Input/><Button type="primary" onClick={uploadFile}>Upload Image & Save </Button></label>
+                  <label>Enter the Invoice NO:<Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} /><br />Enter the Dealer ID:<Input value={userId} onChange={(e) => setuserId(e.target.value)} />Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} /><Button type="primary" onClick={uploadFile}>Upload Image & Save </Button></label>
 
 
+                </Space.Compact>
+              </td>
+              <td>
+                <Space.Compact>
+                  <label><Button type="primary" onClick={PostData}>Post</Button></label>
                 </Space.Compact>
               </td>
             </tr>
