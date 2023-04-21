@@ -3,6 +3,10 @@ import {Image,Button } from 'antd';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
+import {
+  ref,deleteObject,
+} from "firebase/storage";
+import { storage } from "../firebase";
 
 function Requests() {
   const [invoices, setInvoices] = useState([]);
@@ -135,6 +139,22 @@ const handleDelete = async (uniqueId) => {
     console.error('Failed to delete invoice:', error);
   }
 };
+
+// Function to delete an image from Firebase Storage
+const deleteImage = (imgurl) => {
+  const imageRef = ref(storage, `${imgurl}`);
+  console.log(imageRef);
+  deleteObject(imageRef)
+    .then(() => {
+      // Handle successful deletion
+      console.log("Image deleted successfully:", imgurl);
+    })
+    .catch((error) => {
+      // Handle deletion error
+      console.error("Failed to delete image:", error);
+    });
+};
+
   return (
     
       <div>
@@ -160,8 +180,8 @@ const handleDelete = async (uniqueId) => {
               <td>{invoice.formattedTime}</td>
               <td><Image src={invoice.imgurl} alt="Invoice" width={300}/></td>
               <td>{invoice.ammount}</td>
-              <td><Button type="primary" onClick={() => handleDelete(invoice.uniqueId)}>Decline</Button></td>
-              <td><Button type="primary" onClick={() => {handleConfirm(invoice); handleDelete(invoice.invoiceNumber);}}>Confirm</Button></td>
+              <td><Button type="primary" onClick={() => { handleDelete(invoice.uniqueId);deleteImage(invoice.imgurl);}}>Decline</Button></td>
+              <td><Button type="primary" onClick={() => {handleConfirm(invoice); handleDelete(invoice.uniqueId);}}>Confirm</Button></td>
             </tr>
           ))}
         </tbody>
