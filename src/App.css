@@ -52,7 +52,10 @@
   justify-content: flex-start;
   align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.05) ;
+  
 }
+
+
 .img{
   width: 150px;
   height: 150px;
