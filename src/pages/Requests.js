@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {Image,Button } from 'antd';
+import { Image, Button } from 'antd';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
 import {
-  ref,deleteObject,
+  ref, deleteObject,
 } from "firebase/storage";
 import { storage } from "../firebase";
 
@@ -13,40 +13,40 @@ function Requests() {
   // Define tempInvoices and setTempInvoices using useState hook
   const [tempInvoice, setTempInvoice] = useState([]);
 
-  
-// Fetch data and map to invoices
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice.json",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+
+  // Fetch data and map to invoices
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice.json",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          // Map the data to include uniqueId for each invoice
+          const invoicesWithUniqueId = Object.keys(data).map(uniqueId => {
+            return { ...data[uniqueId], uniqueId };
+          });
+          setInvoices(Object.values(invoicesWithUniqueId));
+          setTempInvoice(Object.values(invoicesWithUniqueId));
+        } else {
+          throw new Error("Failed to fetch invoices");
         }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        // Map the data to include uniqueId for each invoice
-        const invoicesWithUniqueId = Object.keys(data).map(uniqueId => {
-          return { ...data[uniqueId], uniqueId };
-        });
-        setInvoices(Object.values(invoicesWithUniqueId));
-        setTempInvoice(Object.values(invoicesWithUniqueId));
-      } else {
-        throw new Error("Failed to fetch invoices");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  fetchData();
-}, []);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
-    $(document).ready(function() {
+    $(document).ready(function () {
       if (invoices.length > 0) {
         $('#example').DataTable();
       }
@@ -59,17 +59,17 @@ useEffect(() => {
     // Perform necessary actions with the invoice data
     console.log("Declined Invoice Data:", invoiceData);
   };
-  
+
   // Handler for confirm button
   const handleConfirm = async (invoiceData) => {
     // Access individual values from invoiceData object
-    const {email,
+    const { email,
       invoiceNumber,
       formattedDate,
       formattedTime,
       imgurl,
       userId,
-      ammount,} = invoiceData;
+      ammount, } = invoiceData;
 
     // Calculate reward
     const reward = ammount / 10;
@@ -77,14 +77,14 @@ useEffect(() => {
     // Create rewardData object to send in POST request
     const rewardData = {
       email,
-          invoiceNumber,
-          formattedDate,
-          formattedTime,
-          imgurl,
-          userId,
-          ammount,
-          reward,
-          
+      invoiceNumber,
+      formattedDate,
+      formattedTime,
+      imgurl,
+      userId,
+      ammount,
+      reward,
+
     };
 
     try {
@@ -99,66 +99,67 @@ useEffect(() => {
 
       if (res.ok) {
         // Update the invoices state with the new data
-        setInvoices(invoices.map(invoice => invoice.invoiceNumber === invoiceData.invoiceNumber ? {...invoice, rewarded: true} : invoice));
-        console.log('Reward added successfully',rewardData);
+        setInvoices(invoices.map(invoice => invoice.invoiceNumber === invoiceData.invoiceNumber ? { ...invoice, rewarded: true } : invoice));
+        console.log('Reward added successfully', rewardData);
       } else {
         console.error('Failed to add reward');
       }
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
-    
+
   };
 
   // Handler for delete button
-const handleDelete = async (uniqueId) => {
-  try {
-    console.log('tempInvoice:', tempInvoice);
-    console.log('uniqueId:', uniqueId);
+  const handleDelete = async (uniqueId) => {
+    try {
+      console.log('tempInvoice:', tempInvoice);
+      console.log('uniqueId:', uniqueId);
 
-    // Find the index of the invoice to delete in tempInvoices
-    const index = tempInvoice.findIndex(invoice => invoice.uniqueId === uniqueId);
+      // Find the index of the invoice to delete in tempInvoices
+      const index = tempInvoice.findIndex(invoice => invoice.uniqueId === uniqueId);
 
-    console.log(index);
-    console.log(uniqueId);
+      console.log(index);
+      console.log(uniqueId);
 
-    if (index !== -1) {
-      // Make DELETE request to Firebase or any other backend service
-      // You can use fetch or any other HTTP library for making DELETE request
-      await fetch(`https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice/${uniqueId}.json`, {
-        method: 'DELETE'
-      });
+      if (index !== -1) {
+        // Make DELETE request to Firebase or any other backend service
+        // You can use fetch or any other HTTP library for making DELETE request
+        await fetch(`https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice/${uniqueId}.json`, {
+          method: 'DELETE'
+        });
 
-      // Remove the deleted invoice from tempInvoices state
-      setTempInvoice(tempInvoice.filter(invoice => invoice.uniqueId !== uniqueId));
-      console.log('Invoice deleted successfully', uniqueId);
-    } else {
-      console.error('Invoice not found in tempInvoice');
+        // Remove the deleted invoice from tempInvoices state
+        setTempInvoice(tempInvoice.filter(invoice => invoice.uniqueId !== uniqueId));
+        console.log('Invoice deleted successfully', uniqueId);
+      } else {
+        console.error('Invoice not found in tempInvoice');
+      }
+    } catch (error) {
+      console.error('Failed to delete invoice:', error);
     }
-  } catch (error) {
-    console.error('Failed to delete invoice:', error);
-  }
-};
+  };
 
-// Function to delete an image from Firebase Storage
-const deleteImage = (imgurl) => {
-  const imageRef = ref(storage, `${imgurl}`);
-  console.log(imageRef);
-  deleteObject(imageRef)
-    .then(() => {
-      // Handle successful deletion
-      console.log("Image deleted successfully:", imgurl);
-    })
-    .catch((error) => {
-      // Handle deletion error
-      console.error("Failed to delete image:", error);
-    });
-};
+  // Function to delete an image from Firebase Storage
+  const deleteImage = (imgurl) => {
+    const imageRef = ref(storage, `${imgurl}`);
+    console.log(imageRef);
+    deleteObject(imageRef)
+      .then(() => {
+        // Handle successful deletion
+        console.log("Image deleted successfully:", imgurl);
+      })
+      .catch((error) => {
+        // Handle deletion error
+        console.error("Failed to delete image:", error);
+      });
+  };
 
   return (
-    
-      <div>
-      <table   id="example" class="table table-striped" >
+
+    <div>
+    {invoices.filter(invoice => invoice.email.toLowerCase() === invoice.userId.toLowerCase()).length > 0 ? (
+      <table id="example" class="table table-striped" >
         <thead>
           <tr>
             <th>Email</th>
@@ -172,23 +173,33 @@ const deleteImage = (imgurl) => {
           </tr>
         </thead>
         <tbody>
-          {invoices.map((invoice) => (
-            <tr key={invoice.invoiceNumber}>
-              <td>{invoice.email}</td>
-              <td>{invoice.invoiceNumber}</td>
-              <td>{invoice.formattedDate}</td>
-              <td>{invoice.formattedTime}</td>
-              <td><Image src={invoice.imgurl} alt="Invoice" width={300}/></td>
-              <td>{invoice.ammount}</td>
-              <td><Button type="primary" onClick={() => { handleDelete(invoice.uniqueId);deleteImage(invoice.imgurl);}}>Decline</Button></td>
-              <td><Button type="primary" onClick={() => {handleConfirm(invoice); handleDelete(invoice.uniqueId);}}>Confirm</Button></td>
-            </tr>
-          ))}
+          {invoices.map((invoice) => {
+            
+              return (
+                <tr key={invoice.invoiceNumber}>
+                  <td>{invoice.email}</td>
+                  <td>{invoice.invoiceNumber}</td>
+                  <td>{invoice.formattedDate}</td>
+                  <td>{invoice.formattedTime}</td>
+                  <td><Image src={invoice.imgurl} alt="Invoice" width={300} /></td>
+                  <td>{invoice.ammount}</td>
+                  <td><Button type="primary" onClick={() => { handleDelete(invoice.uniqueId); deleteImage(invoice.imgurl); }}>Decline</Button></td>
+                  <td><Button type="primary" onClick={() => { handleConfirm(invoice); handleDelete(invoice.uniqueId); }}>Confirm</Button></td>
+                </tr>
+              );
+            
+          })}
         </tbody>
       </table>
-      
+    ) : (
+      <div>
+        <h6 style={{ textAlign: 'center' }}>
+          No Requests available
+        </h6>
       </div>
-    
+    )}
+  </div>
+
   );
 }
 
