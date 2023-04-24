@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import { storage } from "../firebase";
 import { v4 } from "uuid";
 import "./Bill.css";
-import { Space, Button, Input, Image,Checkbox } from "antd";
+import { Space, Button, Input, Image, Checkbox } from "antd";
 import imageCompression from "browser-image-compression"; // Import the image-compression library
 
 function Bill() {
@@ -18,6 +18,7 @@ function Bill() {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [userId, setuserId] = useState("");
   const [ammount, setAmount] = useState("");
+  const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [imgdetails, setImgDetails] = useState({
 
     email: "",
@@ -33,7 +34,7 @@ function Bill() {
   const email = new URLSearchParams(location.search).get("email");
   const PostData = async (e) => {
     e.preventDefault();
-    alert("uploaded successfully");
+
     const {
       email,
       invoiceNumber,
@@ -42,6 +43,21 @@ function Bill() {
       imgurl,
       userId,
       ammount, } = imgdetails;
+    // Check if checkbox is checked
+    if (!checkboxChecked) {
+      // Show alert message if checkbox is not checked
+      alert("Please check the Checkbox before submitting data!");
+      return;
+    }
+
+    // Check if fields are empty
+    if (!invoiceNumber || !userId || !ammount) {
+      // Show warning message if any field is empty
+      alert("Please fill in all the fields!");
+      return;
+    }
+
+    alert("uploaded successfully");
 
     const res = await fetch(
       "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/tempinvoice.json",
@@ -65,7 +81,12 @@ function Bill() {
     );
 
   };
+  const handleCheckboxChange = (e) => {
+    setCheckboxChecked(e.target.checked);
+  };
   const uploadFile = () => {
+
+
     if (imageUpload == null) return;
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString("en-GB").replace(/\//g, "-"); // Format current date as dd/mm/yyyy
@@ -148,8 +169,9 @@ function Bill() {
                     <br />Enter the Dealer ID:
                     <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
                     Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
-                    <Checkbox onChange={uploadFile}>Checkbox</Checkbox>
-                    <Button type="primary" onClick={(e) => {PostData(e); }}>Upload Image & Save</Button>
+                    <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
+
+                    <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
                   </label>
 
 

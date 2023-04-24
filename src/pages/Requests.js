@@ -104,6 +104,7 @@ function Requests() {
       } else {
         console.error('Failed to add reward');
       }
+      window.location.reload(); 
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
@@ -132,9 +133,11 @@ function Requests() {
         // Remove the deleted invoice from tempInvoices state
         setTempInvoice(tempInvoice.filter(invoice => invoice.uniqueId !== uniqueId));
         console.log('Invoice deleted successfully', uniqueId);
+        
       } else {
         console.error('Invoice not found in tempInvoice');
       }
+      window.location.reload(); 
     } catch (error) {
       console.error('Failed to delete invoice:', error);
     }
