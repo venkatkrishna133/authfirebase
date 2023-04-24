@@ -3,6 +3,7 @@ import { getDownloadURL, ref, listAll } from 'firebase/storage';
 import { storage } from '../firebase';
 import { Typography, Image } from 'antd';
 import { Container, Row, Col } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 import "./Transactions.css";
 import $ from 'jquery';
 import 'datatables.net';
@@ -10,25 +11,42 @@ import 'datatables.net-bs5';
 
 const Transactions = () => {
   const [imageUrls, setImageUrls] = useState([]);
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+    // Fetch data and map to invoices
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const res = await fetch(
+            "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/invoices.json",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (res.ok) {
+            const data = await res.json();
+            // Map the data to include uniqueId for each invoice
+            const invoicesWithUniqueId = Object.keys(data).map(uniqueId => {
+              return { ...data[uniqueId], uniqueId };
+            });
+            
+            // Filter invoices based on current email
+            const filteredInvoices = invoicesWithUniqueId.filter(invoice => invoice.email === email);
+            setImageUrls(filteredInvoices);
+            
+          } else {
+            throw new Error("Failed to fetch invoices");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
+    }, [email]);
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const listResult = await listAll(ref(storage, 'images')); // Fetch list of all files in 'images' folder
-        const urls = await Promise.all(
-          listResult.items.map(async (item) => {
-            const url = await getDownloadURL(item);
-            const name = item.name; // Fetch download URL for each file
-            return { url, name };
-          })
-        );
-        setImageUrls(urls);
-      } catch (error) {
-        console.error('Error fetching images:', error);
-      }
-    };
-    fetchImages();
-  }, []);
 
   useEffect(() => {
     $(document).ready(function () {
@@ -48,32 +66,29 @@ const Transactions = () => {
           </tr>
         </thead><br />
         <tbody>
-          {imageUrls.length > 0 ? (
-            imageUrls.map((data, index) => (
-              <tr key={index}>
-                <td>
-                  <p style={{ marginTop: 20 }}>
-                  <span style={{ fontWeight: 'bold' }}>Email:</span> {data.name.split(' ')[0]} <br />
-                  <span style={{ fontWeight: 'bold' }}>Invoicenumber:</span>  {data.name.split(' ')[1]} <br />
-                  <span style={{ fontWeight: 'bold' }}>Date:</span>  {data.name.split(' ')[2]} <br />
-                  <span style={{ fontWeight: 'bold' }}>Time:</span>  {data.name.split(' ')[3].replace('-', ':')} {data.name.split(' ')[4] === 'AM' ? 'AM' : 'PM'}
-                  </p>
+          {imageUrls.map((data, index) => (
+            <tr key={index}>
+              <td>
+                <p style={{ marginTop: 20 }}>
+                <span style={{ fontWeight: 'bold' }}>Email:</span>{data.email}<br/>
+                <span style={{ fontWeight: 'bold' }}>InvoiceNumber:</span>{data.invoiceNumber}<br/>
+                <span style={{ fontWeight: 'bold' }}>Date:</span>{data.formattedDate}<br/>
+                <span style={{ fontWeight: 'bold' }}>Time:</span>{data.formattedTime}<br/>
+                <span style={{ fontWeight: 'bold' }}>Amount:</span>{data.ammount}<br/>
+                </p>
+              </td>
+              
+              
+              
+              <td>
+                <Image src={data.imgurl} alt={`Invoice Image ${index}`} style={{ width: '100px', height: 'auto' }} />
+              </td>
+              
+            </tr>
+          ))}
+          
 
-                  {/* Display the name of the image */}
-                </td>
-
-                <td>
-                  <Image
-                    src={data.url}
-                    alt={`Transaction ${index}`}
-                    style={{ width: '300px', height: 'auto', borderRadius: '5px', marginTop: 20 }}
-                  />
-                </td>
-              </tr>
-            ))
-          ) : (
-            <p>No images available</p>
-          )}
+          
         </tbody>
       </table>
     </div>

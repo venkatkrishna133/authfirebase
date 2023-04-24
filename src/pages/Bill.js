@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import { storage } from "../firebase";
 import { v4 } from "uuid";
 import "./Bill.css";
-import { Space, Button, Input } from "antd";
+import { Space, Button, Input, Image,Checkbox } from "antd";
 import imageCompression from "browser-image-compression"; // Import the image-compression library
 
 function Bill() {
@@ -138,21 +138,28 @@ function Bill() {
               />
               </td>
               <td>
-                {previewImage && <img src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
+                {previewImage && <Image src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
 
               </td>
               <td>
                 <Space.Compact style={{ width: '100%' }}>
-                  <label>Enter the Invoice NO:<Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} /><br />Enter the Dealer ID:<Input value={userId} onChange={(e) => setuserId(e.target.value)} />Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} /><Button type="primary" onClick={uploadFile}>Upload Image & Save </Button></label>
+                  <label>Enter the Invoice NO:
+                    <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} />
+                    <br />Enter the Dealer ID:
+                    <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
+                    Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
+                    <Checkbox onChange={uploadFile}>Checkbox</Checkbox>
+                    <Button type="primary" onClick={(e) => {PostData(e); }}>Upload Image & Save</Button>
+                  </label>
 
 
                 </Space.Compact>
               </td>
-              <td>
+              {/* <td>
                 <Space.Compact>
-                  <label><Button type="primary" onClick={PostData}>Post</Button></label>
+                  <label><Button type="primary" onClick={}>Post</Button></label>
                 </Space.Compact>
-              </td>
+              </td> */}
             </tr>
           </tbody>
         </table>
