@@ -51,13 +51,13 @@ function Dashboard() {
 
   return (
 
-    <div>
+    <div style={{marginLeft:20, marginTop:20}}>
       
 
       <Space size={20} direction="vertical">
 
         <Typography.Title level={4}>Dashboard</Typography.Title>
-        <Space direction="horizontal">
+        <Space direction="horizontal" style={{display:'flex',justifyContent:'center'}}>
           <DashboardCard
             icon={
               <ShoppingCartOutlined
@@ -186,6 +186,7 @@ function DashboardChart() {
     getRevenue().then((res) => {
       const labels = res.carts.map((cart) => {
         return `User-${cart.userId}`;
+
       });
       const data = res.carts.map((cart) => {
         return cart.discountedTotal;
