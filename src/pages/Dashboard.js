@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Card, Space, Statistic, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers, getInventory, getOrders, getRevenue } from "../API/data";
+import { getCustomers, getTransaction, getOrders, getRevenue } from "../API/data";
 
 import {
   Chart as ChartJS,
@@ -32,7 +32,7 @@ ChartJS.register(
 
 function Dashboard() {
   const [orders, setOrders] = useState(0);
-  const [inventory, setInventory] = useState(0);
+  const [transaction, setTransaction] = useState(0);
   const [customers, setCustomers] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
@@ -41,8 +41,8 @@ function Dashboard() {
       setOrders(data);
       
     });
-    getInventory().then((data) => {
-      setInventory(data);
+    getTransaction().then((data) => {
+      setTransaction(data);
     });
     getCustomers().then((data) => {
       setCustomers(data);
@@ -60,13 +60,13 @@ function Dashboard() {
       .catch((error) => console.log(error));
   }, []);
   useEffect(() => {
-    getInventory()
+    getTransaction()
       .then((data) => {
-        const inventoryArray = [];
+        const transactionArray = [];
         for (const key in data) {
-          inventoryArray.push({ id: key, ...data[key] });
+          transactionArray.push({ id: key, ...data[key] });
         }
-        setInventory(inventoryArray);
+        setTransaction(transactionArray);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -106,8 +106,8 @@ function Dashboard() {
                 }}
               />
             }
-            title={"Orders"}
-            value={inventory.length}
+            title={"Transaction"}
+            value={transaction.length}
           />
           <DashboardCard
             icon={
