@@ -160,9 +160,9 @@ function Requests() {
 
   return (
 
-    <div>
+    <div  style={{marginLeft:20, marginTop:20}}>
     {invoices.filter(invoice => invoice.email.toLowerCase() === invoice.userId.toLowerCase()).length > 0 ? (
-      <table id="example" class="table table-striped" >
+      <table id="example" class="table table-striped table-hover" >
         <thead>
           <tr>
             <th>Email</th>

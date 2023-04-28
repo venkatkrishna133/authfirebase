@@ -3,7 +3,9 @@ import {
     ShopOutlined,
     ShoppingCartOutlined,
     UserOutlined,
-    BellFilled
+    BellFilled,
+    SnippetsFilled,
+    EditFilled,
   } from "@ant-design/icons";
   import { Menu } from "antd";
   import { useEffect, useState } from "react";
@@ -52,6 +54,16 @@ import {
               label: "Requests",
               key: `/requests?email=${email}`,
               icon: <BellFilled />,
+            },
+            {
+              label: "EditProfile",
+              key: `/editProfile?email=${email}`,
+              icon: <EditFilled />,
+            },
+            {
+              label: "Detials",
+              key: `/details?email=${email}`,
+              icon: <SnippetsFilled />,
             },
           ]}
         ></Menu>

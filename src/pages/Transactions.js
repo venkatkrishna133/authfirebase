@@ -57,8 +57,8 @@ const Transactions = () => {
   }, [imageUrls]);
 
   return (
-    <div>
-      <table id="example" class="table table-striped">
+    <div className="table-responsive" style={{marginLeft:20, marginTop:20, width:'85%'}} >
+      <table id="example" class="table table-striped table-hover">
         <thead>
           <tr>
             <th>Invoice Details</th>

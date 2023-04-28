@@ -148,7 +148,7 @@ function Bill() {
   };
 
   return (
-    <div className="bill">
+    <div className="bill"  style={{marginLeft:20, marginTop:20}}>
       <div class="container">
         <table>
           <tbody>
