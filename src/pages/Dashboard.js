@@ -37,12 +37,12 @@ function Dashboard() {
   const [revenue, setRevenue] = useState(0);
 
   useEffect(() => {
-    getOrders().then((res) => {
-      setOrders(res.total);
-      setRevenue(res.discountedTotal);
+    getOrders().then((data) => {
+      setOrders(data);
+      
     });
-    getInventory().then((res) => {
-      setInventory(res.total);
+    getInventory().then((data) => {
+      setInventory(data);
     });
     getCustomers().then((data) => {
       setCustomers(data);
@@ -59,7 +59,17 @@ function Dashboard() {
       })
       .catch((error) => console.log(error));
   }, []);
-
+  useEffect(() => {
+    getInventory()
+      .then((data) => {
+        const inventoryArray = [];
+        for (const key in data) {
+          inventoryArray.push({ id: key, ...data[key] });
+        }
+        setInventory(inventoryArray);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
 
     <div style={{marginLeft:20, marginTop:20}}>
@@ -69,6 +79,21 @@ function Dashboard() {
 
         <Typography.Title level={4}>Dashboard</Typography.Title>
         <Space direction="horizontal" style={{display:'flex',justifyContent:'center'}}>
+          <DashboardCard
+            icon={
+              <ShoppingOutlined
+                style={{
+                  color: "blue",
+                  backgroundColor: "rgba(0,0,255,0.25)",
+                  borderRadius: 20,
+                  fontSize: 24,
+                  padding: 8,
+                }}
+              />
+            }
+            title={"Orders"}
+            value={orders}
+          />
           <DashboardCard
             icon={
               <ShoppingCartOutlined
@@ -82,22 +107,7 @@ function Dashboard() {
               />
             }
             title={"Orders"}
-            value={orders}
-          />
-          <DashboardCard
-            icon={
-              <ShoppingOutlined
-                style={{
-                  color: "blue",
-                  backgroundColor: "rgba(0,0,255,0.25)",
-                  borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8,
-                }}
-              />
-            }
-            title={"Inventory"}
-            value={inventory}
+            value={inventory.length}
           />
           <DashboardCard
             icon={
