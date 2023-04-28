@@ -60,11 +60,7 @@ import {
               key: `/editProfile?email=${email}`,
               icon: <EditFilled />,
             },
-            {
-              label: "Detials",
-              key: `/details?email=${email}`,
-              icon: <SnippetsFilled />,
-            },
+            
           ]}
         ></Menu>
       </div>

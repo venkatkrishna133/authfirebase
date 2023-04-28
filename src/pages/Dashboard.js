@@ -44,9 +44,20 @@ function Dashboard() {
     getInventory().then((res) => {
       setInventory(res.total);
     });
-    getCustomers().then((res) => {
-      setCustomers(res.total);
+    getCustomers().then((data) => {
+      setCustomers(data);
     });
+  }, []);
+  useEffect(() => {
+    getCustomers()
+      .then((data) => {
+        const customersArray = [];
+        for (const key in data) {
+          customersArray.push({ id: key, ...data[key] });
+        }
+        setCustomers(customersArray);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   return (
@@ -101,7 +112,7 @@ function Dashboard() {
               />
             }
             title={"Customer"}
-            value={customers}
+            value={customers.length}
           />
           <DashboardCard
             icon={

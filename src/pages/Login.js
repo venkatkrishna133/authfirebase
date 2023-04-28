@@ -17,7 +17,7 @@ const Login = () => {
     setError("");
     try {
       await logIn(email, password);
-      navigate(`/dashboard?email=${email.toLowerCase()}`);
+      navigate(`/check?email=${email.toLowerCase()}`);
     } catch (err) {
       setError(err.message);
     }

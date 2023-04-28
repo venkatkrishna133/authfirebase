@@ -6,7 +6,7 @@ import GoogleButton from "react-google-button";
 const EditProfile = () => {
     const navigate = useNavigate();
     const [userform, setuserform] = useState([]);
-   
+
     const location = useLocation();
     const email = new URLSearchParams(location.search).get("email");
     const states = ['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
@@ -30,7 +30,7 @@ const EditProfile = () => {
         uTypeofBussiness: "",
         uOwnerName: ""
     });
-    
+
     // ...
     useEffect(() => {
         const fetchData = async () => {
@@ -50,12 +50,12 @@ const EditProfile = () => {
                     const userformWithUniqueId = Object.keys(data).map(uniqueId => {
                         return { ...data[uniqueId], uniqueId };
                     });
-                   
+
                     setuserform(Object.values(userformWithUniqueId));
 
                     // Filter userform array to check if email exists
                     const filteredUserForm = userformWithUniqueId.filter(user => user.uemail === email);
-                    console.log("u",filteredUserForm); // filtered array with matching email
+                    console.log("u", filteredUserForm); // filtered array with matching email
 
 
                 } else {
@@ -73,69 +73,70 @@ const EditProfile = () => {
     const handleSubmit = async (e, uniqueId) => {
         e.preventDefault();
         if (filteredUserForm.length > 0) {
-          const upData = {
-            ...details,
-            uId: e.target.uId.value,
-            uName: e.target.uName.value,
-            uaccCode: e.target.uaccCode.value,
-            uaddr1: e.target.uaddr1.value,
-            uaddr2: e.target.uaddr2.value,
-            pinCode: e.target.pinCode.value,
-            ucity: e.target.ucity.value,
-            uState: e.target.uState.value,
-            uCountry: e.target.uCountry.value,
-            uPhonenum: e.target.uPhonenum.value,
-            uAlnum: e.target.uAlnum.value,
-            uemail: e.target.uemail.value,
-            uL1emp: e.target.uL1emp.value,
-            uL2emp: e.target.uL2emp.value,
-            uGstinNum: e.target.uGstinNum.value,
-            uTypeofBussiness: e.target.uTypeofBussiness.value,
-            uOwnerName: e.target.uOwnerName.value,
+            const upData = {
+                ...details,
+                uId: e.target.uId.value,
+                uName: e.target.uName.value,
+                uaccCode: e.target.uaccCode.value,
+                uaddr1: e.target.uaddr1.value,
+                uaddr2: e.target.uaddr2.value,
+                pinCode: e.target.pinCode.value,
+                ucity: e.target.ucity.value,
+                uState: e.target.uState.value,
+                uCountry: e.target.uCountry.value,
+                uPhonenum: e.target.uPhonenum.value,
+                uAlnum: e.target.uAlnum.value,
+                uemail: e.target.uemail.value,
+                uL1emp: e.target.uL1emp.value,
+                uL2emp: e.target.uL2emp.value,
+                uGstinNum: e.target.uGstinNum.value,
+                uTypeofBussiness: e.target.uTypeofBussiness.value,
+                uOwnerName: e.target.uOwnerName.value,
 
-            // add all other fields from your form here
-          };
-          console.log("uniqueID",uniqueId);
-          // Update profile data to the backend
-          try {
-            const response = await fetch(
-              `https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/userform/${uniqueId}.json`, // Update the URL to include the uId in the path
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(upData),
-              }
-            );
-            if (response.ok) {
-              // Handle success
-              console.log("Profile data updated successfully!");
-              navigate(`/editProfile?email=${email}`);
-            } else {
-              // Handle error
-              console.error("Failed to update profile data");
+                // add all other fields from your form here
+            };
+            console.log("uniqueID", uniqueId);
+            // Update profile data to the backend
+            try {
+                const response = await fetch(
+                    `https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/userform/${uniqueId}.json`, // Update the URL to include the uId in the path
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(upData),
+                    }
+                );
+                if (response.ok) {
+                    // Handle success
+                    console.log("Profile data updated successfully!");
+                    alert("Profile data updated successfully!");
+                    navigate(`/editProfile?email=${email}`);
+                } else {
+                    // Handle error
+                    console.error("Failed to update profile data");
+                }
+            } catch (error) {
+                console.error("Failed to update profile data", error);
             }
-          } catch (error) {
-            console.error("Failed to update profile data", error);
-          }
         }
-      };
-            
-      
+    };
+
+
 
 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDetails({ ...details, [name]: value });
-      };
-      
-      
+    };
+
+
     return (
-        <div className="form" style={{ width: '90vw',height: '95vh' }}>
-            
-            <div className="container" style={{ display: 'flex',justifyContent: 'center',alignItems: 'center',marginLeft:20, marginTop:20 }}>
+        <div className="form" style={{ width: '90vw', height: '95vh' }}>
+
+            <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: 20, marginTop: 20 }}>
                 <div>
                     <h3 className="position-relative">
                         Edit Details Form
@@ -150,16 +151,16 @@ const EditProfile = () => {
                                 <Form.Group className="mb-3">
                                     <label htmlFor="user_id">User Id : </label>
                                     <Form.Control
-                                    
+
                                         type="text"
                                         placeholder="Uid.*"
                                         name="uId"
                                         value={details.uId || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uId
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uId: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uId: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -173,9 +174,9 @@ const EditProfile = () => {
                                         value={details.uName || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uName
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uName: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uName: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -189,9 +190,9 @@ const EditProfile = () => {
                                         value={details.uaccCode || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uaccCode
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uaccCode: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uaccCode: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -207,9 +208,9 @@ const EditProfile = () => {
                                         value={details.uaddr1 || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uaddr1
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uaddr1: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uaddr1: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -224,9 +225,9 @@ const EditProfile = () => {
                                         value={details.uaddr2 || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uaddr2
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uaddr2: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uaddr2: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -243,9 +244,9 @@ const EditProfile = () => {
                                         value={details.pinCode || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].pinCode
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, pinCode: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, pinCode: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -260,27 +261,29 @@ const EditProfile = () => {
                                         value={details.ucity || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].ucity
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, ucity: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, ucity: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
                             <div className="col-md-3">
                                 <Form.Group className="mb-3">
                                     <label htmlFor="state">State : </label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="State.*"
+                                    <select
                                         name="uState"
-                                        value={details.uState || (filteredUserForm.length > 0
-                                            ? filteredUserForm[0].uState
-                                            : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uState: e.target.value })
-                                              }
-                                    />
+                                        value={details.uState || (filteredUserForm.length > 0 ? filteredUserForm[0].uState : "")}
+                                        onChange={(e) => setDetails({ ...details, uState: e.target.value })}
+                                    >
+                                        <option value="">Please select a state</option>
+                                        {states.map((state) => (
+                                            <option key={state} value={state}>
+                                                {state}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </Form.Group>
+
                             </div>
                             <div className="col-md-3">
                                 <Form.Group className="mb-3">
@@ -292,9 +295,9 @@ const EditProfile = () => {
                                         value={details.uCountry || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uCountry
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uCountry: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uCountry: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -311,9 +314,9 @@ const EditProfile = () => {
                                         value={details.uPhonenum || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uPhonenum
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uPhonenum: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uPhonenum: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -327,9 +330,9 @@ const EditProfile = () => {
                                         value={details.uAlnum || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uAlnum
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uAlnum: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uAlnum: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -343,12 +346,12 @@ const EditProfile = () => {
                                         value={details.uemail || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uemail
                                             : "")}
-                                            onChange={handleSubmit}
+                                        onChange={handleSubmit}
                                     />
                                 </Form.Group>
                             </div>
-                            
-                            
+
+
                         </div>
 
                         <div className="row">
@@ -362,9 +365,9 @@ const EditProfile = () => {
                                         value={details.uL1emp || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uL1emp
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uL1emp: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uL1emp: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -378,9 +381,9 @@ const EditProfile = () => {
                                         value={details.uL2emp || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uL2emp
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uL2emp: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uL2emp: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -397,9 +400,9 @@ const EditProfile = () => {
                                         value={details.uGstinNum || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uGstinNum
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uGstinNum: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uGstinNum: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -413,9 +416,9 @@ const EditProfile = () => {
                                         value={details.uTypeofBussiness || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uTypeofBussiness
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uTypeofBussiness: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uTypeofBussiness: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>
@@ -429,9 +432,9 @@ const EditProfile = () => {
                                         value={details.uOwnerName || (filteredUserForm.length > 0
                                             ? filteredUserForm[0].uOwnerName
                                             : "")}
-                                            onChange={(e) =>
-                                                setDetails({ ...details, uOwnerName: e.target.value })
-                                              }
+                                        onChange={(e) =>
+                                            setDetails({ ...details, uOwnerName: e.target.value })
+                                        }
                                     />
                                 </Form.Group>
                             </div>

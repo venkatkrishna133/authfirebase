@@ -18,6 +18,7 @@ import Bill from "./pages/Bill";
 import Transactions from "./pages/Transactions";
 import Requests from "./pages/Requests";
 import EditProfile from "./pages/EditProfile";
+import Check from "./pages/Check";
 
 
 function App() {
@@ -27,6 +28,20 @@ function App() {
   return (
 
     <>
+    <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/check"
+            element={
+              <ProtectedRoute>
+                
+                  <Check/>
+               
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
       <UserAuthContextProvider>
         <Routes>
           <Route
@@ -124,10 +139,9 @@ function App() {
               <ProtectedRoute>
                 <AppHeader />
 
-                <container style={{ display: 'flex', }}>
-                  <SideMenu />
+                
                   <Details />
-                </container>
+                
               </ProtectedRoute>
             }
           />

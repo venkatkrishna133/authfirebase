@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation} from "react-router-dom";
 // import "./Details.css";
 import { Form, Alert, Stack } from "react-bootstrap";
 import { Button } from "react-bootstrap";
@@ -8,11 +8,16 @@ import GoogleButton from "react-google-button";
 
 const Details = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const states = ['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
+
+
   const [details, setDetails] = useState({
-    
-    uId:"",
+
+    uId: "",
     uName: "",
-    uaccCode:"",
+    uaccCode: "",
     uaddr1: "",
     uaddr2: "",
     pinCode: "",
@@ -21,7 +26,7 @@ const Details = () => {
     uCountry: "",
     uPhonenum: "",
     uAlnum: "",
-    uemail:"",
+    uemail: email,
     uL1emp: "",
     uL2emp: "",
     uGstinNum: "",
@@ -33,7 +38,8 @@ const Details = () => {
   const PostData = async (e) => {
     e.preventDefault();
 
-    const { uId, uName, uaccCode,uaddr1,uaddr2,pinCode,ucity,uState,uCountry,uPhonenum,uAlnum,uemail,uL1emp,uL2emp,uGstinNum,uTypeofBussiness,uOwnerName } = details;
+    
+    const { uId, uName, uaccCode, uaddr1, uaddr2, pinCode, ucity, uState, uCountry, uPhonenum, uAlnum, uemail, uL1emp, uL2emp, uGstinNum, uTypeofBussiness, uOwnerName } = details;
 
     const res = await fetch(
       "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/userform.json",
@@ -43,41 +49,37 @@ const Details = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            uId,
-            uName,
-            uaccCode,
-            uaccCode,
-            uaddr1,
-            uaddr2,
-            uaddr1,
-            pinCode,
-            ucity,
-            uState,
-            uCountry,
-            uPhonenum,
-            uAlnum,
-            uemail,
-            uL1emp,
-            uL2emp,
-            uGstinNum,
-            uTypeofBussiness,
-            uOwnerName,
+          uId,
+          uName,
+          uaccCode,
+          uaccCode,
+          uaddr1,
+          uaddr2,
+          uaddr1,
+          pinCode,
+          ucity,
+          uState,
+          uCountry,
+          uPhonenum,
+          uAlnum,
+          uemail:email,
+          uL1emp,
+          uL2emp,
+          uGstinNum,
+          uTypeofBussiness,
+          uOwnerName,
 
         }),
       }
-      
+
     );
-    navigate("/");
+    navigate(`/dashboard?email=${email}`);
   };
 
   return (
     <div className="form">
-      <div className="container" style={{ width: "1000px" }}>
+      <div className="container" >
         <div>
-          <br />
-          <br />
-          <br />
-          <br />
           <h3 className="position-relative">
             Detials Form
             <span
@@ -94,8 +96,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uId:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uId: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -106,8 +108,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uName:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uName: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -118,8 +120,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uaccCode:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uaccCode: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -132,8 +134,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uaddr1:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uaddr1: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -141,8 +143,8 @@ const Details = () => {
               <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="add2">Address Line 2</label>
-                  <input type="text" className="form-control" onChange={(e)=>
-            setDetails({...details,uaddr2:e.target.value})}></input>
+                  <input type="text" className="form-control" onChange={(e) =>
+                    setDetails({ ...details, uaddr2: e.target.value })}></input>
                 </div>
               </div>
             </div>
@@ -155,8 +157,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,pinCode:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, pinCode: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -168,21 +170,26 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,ucity:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, ucity: e.target.value })}
                   ></input>
                 </div>
               </div>
               <div className="col-md-3">
                 <div className="mb-3">
-                  <label htmlFor="state">State</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uState:e.target.value})}
-                  ></input>
+                  <label htmlFor="state">State : </label>
+                  <select
+                    name="uState"
+
+                    autoFocus onChange={(e) => setDetails({ ...details, uState: e.target.value })}
+                  >
+                    <option value="">Please select a state</option>
+                    {states.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="col-md-3">
@@ -192,8 +199,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uCountry:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uCountry: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -207,16 +214,16 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uPhonenum:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uPhonenum: e.target.value })}
                   ></input>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="mb-3">
                   <label htmlFor="alt_num">Alternate Number</label>
-                  <input type="text" className="form-control" required onChange={(e)=>
-            setDetails({...details,uAlnum:e.target.value})}></input>
+                  <input type="text" className="form-control" required onChange={(e) =>
+                    setDetails({ ...details, uAlnum: e.target.value })}></input>
                 </div>
               </div>
               <div className="col-md-4">
@@ -226,8 +233,9 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uemail:e.target.value})}
+                    value={email}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uemail: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -237,15 +245,15 @@ const Details = () => {
               <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="user_id">L1 Employee</label>
-                  <input type="text" className="form-control" required onChange={(e)=>
-            setDetails({...details,uL1emp:e.target.value})}></input>
+                  <input type="text" className="form-control" required onChange={(e) =>
+                    setDetails({ ...details, uL1emp: e.target.value })}></input>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="user_id">L2 Employee</label>
-                  <input type="text" className="form-control" required onChange={(e)=>
-            setDetails({...details,uL2emp:e.target.value})}></input>
+                  <input type="text" className="form-control" required onChange={(e) =>
+                    setDetails({ ...details, uL2emp: e.target.value })}></input>
                 </div>
               </div>
             </div>
@@ -258,8 +266,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uGstinNum:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uGstinNum: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -270,8 +278,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uTypeofBussiness:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uTypeofBussiness: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -282,8 +290,8 @@ const Details = () => {
                     type="text"
                     className="form-control"
                     required
-                    autoFocus onChange={(e)=>
-                        setDetails({...details,uOwnerName:e.target.value})}
+                    autoFocus onChange={(e) =>
+                      setDetails({ ...details, uOwnerName: e.target.value })}
                   ></input>
                 </div>
               </div>
@@ -296,7 +304,7 @@ const Details = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                
+
                 }}
               >
                 <div className="mb-3">
