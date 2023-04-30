@@ -7,11 +7,14 @@ import {
   ref, deleteObject,
 } from "firebase/storage";
 import { storage } from "../firebase";
+import { useLocation } from "react-router-dom";
 
 function Requests() {
   const [invoices, setInvoices] = useState([]);
   // Define tempInvoices and setTempInvoices using useState hook
   const [tempInvoice, setTempInvoice] = useState([]);
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email").trim();
 
 
   // Fetch data and map to invoices
@@ -35,6 +38,7 @@ function Requests() {
           });
           setInvoices(Object.values(invoicesWithUniqueId));
           setTempInvoice(Object.values(invoicesWithUniqueId));
+          console.log(invoicesWithUniqueId);
         } else {
           throw new Error("Failed to fetch invoices");
         }
@@ -158,10 +162,14 @@ function Requests() {
       });
   };
 
+  const filteredInvoices = invoices.filter(invoice => Object.is(email, invoice.userId));
+
+  console.log(filteredInvoices.length);
+
   return (
 
     <div  style={{marginLeft:20, marginTop:20}}>
-    {invoices.filter(invoice => invoice.email.toLowerCase() === invoice.userId.toLowerCase()).length > 0 ? (
+    {filteredInvoices.length > 0 ? (
       <table id="example" class="table table-striped table-hover" >
         <thead>
           <tr>
