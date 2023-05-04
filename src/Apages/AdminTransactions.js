@@ -9,7 +9,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5';
 
-const Transactions = () => {
+const AdminTransactions = () => {
   const [imageUrls, setImageUrls] = useState([]);
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
@@ -32,11 +32,8 @@ const Transactions = () => {
             const invoicesWithUniqueId = Object.keys(data).map(uniqueId => {
               return { ...data[uniqueId], uniqueId };
             });
-            
-            // Filter invoices based on current email
-            const filteredInvoices = invoicesWithUniqueId.filter(invoice => invoice.email === email);
-            console.log(email);
-            setImageUrls(filteredInvoices);
+
+            setImageUrls(invoicesWithUniqueId);
             
           } else {
             throw new Error("Failed to fetch invoices");
@@ -97,4 +94,4 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default AdminTransactions;

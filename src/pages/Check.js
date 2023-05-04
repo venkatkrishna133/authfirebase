@@ -30,7 +30,7 @@ const Check = () => {
           const filteredUserForm = userformWithUniqueId.filter(user => user.uemail === email);
           if (filteredUserForm.length > 0) {
         
-            navigate(`/dashboard?email=${email}`);
+            navigate(`/adminDashboard?email=${email}`);
           } else {
             navigate(`/details?email=${email}`);
           }

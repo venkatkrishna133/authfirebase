@@ -6,7 +6,7 @@ import {
 } from "firebase/storage";
 import { useLocation } from "react-router-dom";
 import { storage } from "../firebase";
-
+import { v4 } from "uuid";
 
 import { Space, Button, Input, Image, Checkbox } from "antd";
 import imageCompression from "browser-image-compression"; // Import the image-compression library

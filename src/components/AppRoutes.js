@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Bill from "../pages/Bill";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../Apages/Dashboard";
 import RewardPoints from "../pages/RewardPoints";
 import Transactions from "../pages/Transactions";
 
