@@ -18,10 +18,13 @@ function Bill() {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [userId, setuserId] = useState("");
   const [rewards, setRewards] = useState();
-  const [selectedReward, setSelectedReward] = useState("");
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [ammount, setAmount] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const [selectedReward, setSelectedReward] = useState("");
+  const items = selectedReward.split("-")[0] // Log the items value
+  const percent = selectedReward.split("-")[1]
   const [imgdetails, setImgDetails] = useState({
 
     email: "",
@@ -30,7 +33,8 @@ function Bill() {
     formattedTime: "",
     imgurl: "",
     ammount: "",
-    selectedReward: "",
+
+
 
 
   });
@@ -48,7 +52,8 @@ function Bill() {
       imgurl,
       userId,
       ammount,
-      selectedReward, } = imgdetails;
+      items,
+      percent, } = imgdetails;
     // Check if checkbox is checked
     if (!checkboxChecked) {
       // Show alert message if checkbox is not checked
@@ -81,7 +86,8 @@ function Bill() {
           imgurl,
           userId,
           ammount,
-          selectedReward,
+          items,
+          percent,
 
         }),
       }
@@ -90,7 +96,7 @@ function Bill() {
   };
   const handleCheckboxChange = (e) => {
     setCheckboxChecked(e.target.checked);
-    
+
   };
   const uploadFile = () => {
 
@@ -102,8 +108,7 @@ function Bill() {
     console.log("Current Time:", formattedTime);
     console.log("Current Date and Time:", currentDate);
     console.log("Current Date:", formattedDate);
-    console.log(selectedReward.split("-")[0]); // Log the items value
-    console.log(selectedReward.split("-")[1]);
+
     console.log(userId);
     const imageRef = ref(storage, `images/${email} ${invoiceNumber} ${formattedDate} ${formattedTime}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
@@ -120,6 +125,9 @@ function Bill() {
           imgurl: url,
           userId: userId,
           ammount: ammount,
+          items,
+          percent,
+
 
         });
       });

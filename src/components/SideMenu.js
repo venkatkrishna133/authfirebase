@@ -38,7 +38,7 @@ import {
             {
               label: "Dashbaord",
               icon: <AppstoreOutlined />,
-              key: `/dashboard?email=${email}`,
+              key: `/userDashboard?email=${email}`,
             },
             {
               label: "Bill Entry",
