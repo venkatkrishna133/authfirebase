@@ -95,11 +95,26 @@ function Bill() {
 
   };
   const handleCheckboxChange = (e) => {
+    // Check if fields are empty
+    if (!invoiceNumber || !userId || !ammount) {
+      // Do not check the checkbox
+      setCheckboxChecked(false);
+      // Show warning message if any field is empty
+      
+      return;
+    }
+    // Check the checkbox
     setCheckboxChecked(e.target.checked);
-
   };
+  
   const uploadFile = () => {
 
+      // Check if fields are empty
+      if (!invoiceNumber || !userId || !ammount) {
+        // Show warning message if any field is empty
+        alert("Please fill in all the fields!");
+        return;
+      }
 
     if (imageUpload == null) return;
     const currentDate = new Date();
@@ -225,11 +240,14 @@ function Bill() {
                       <br />Enter the Dealer ID:
                       <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
                       Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
-                      <select value={selectedReward} onChange={(e) => setSelectedReward(e.target.value)}>
-                        {rewards.map((reward) => (
-                          <option key={reward.uniqueId} value={`${reward.items}-${reward.percent}`}>{reward.items} - {reward.percent}%</option>
-                        ))}
-                      </select>
+                      {rewards.length > 0 && (
+                        <select value={selectedReward} onChange={(e) => setSelectedReward(e.target.value)}>
+                          <option value="">Select Reward</option>
+                          {rewards.map((reward) => (
+                            <option key={reward.uniqueId} value={`${reward.items}-${reward.percent}`}>{reward.items} - {reward.percent}%</option>
+                          ))}
+                        </select>
+                      )}
                       <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
 
                       <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>

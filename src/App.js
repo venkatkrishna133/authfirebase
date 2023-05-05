@@ -15,6 +15,7 @@ import AppHeader from "./components/AppHeader";
 import AppFotter from "./components/AppFotter";
 import AppRoutes from "./components/AppRoutes";
 import Bill from "./pages/Bill";
+import UserDashboard from "./pages/UserDashboard";
 import Transactions from "./pages/Transactions";
 import Requests from "./pages/Requests";
 import EditProfile from "./pages/EditProfile";
@@ -241,6 +242,24 @@ function App() {
                 <container style={{ display: 'flex', }}>
                   <SideMenu />
                   <Requests />
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/userDashboard"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <SideMenu />
+                  <UserDashboard />
                 </container>
 
               </ProtectedRoute>
