@@ -15,11 +15,13 @@ import AppHeader from "./components/AppHeader";
 import AppFotter from "./components/AppFotter";
 import AppRoutes from "./components/AppRoutes";
 import Bill from "./pages/Bill";
+import UserDashboard from "./pages/UserDashboard";
 import Transactions from "./pages/Transactions";
 import Requests from "./pages/Requests";
 import EditProfile from "./pages/EditProfile";
 import Check from "./pages/Check";
-import AsideMenu from "./components/AdminSideMenu";
+import Checkadmin from "./pages/Checkadmin";
+import AdminSideMenu from "./components/AdminSideMenu";
 import AdminTransactions from "./Apages/AdminTransactions";
 import AdminRequests from "./Apages/AdminRequests";
 import AdminUsersControl from "./Apages/AdminUsersControl";
@@ -48,6 +50,20 @@ function App() {
           />
         </Routes>
       </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/checkAdmin"
+            element={
+              <ProtectedRoute>
+
+                <Checkadmin />
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
       {/* ****************************************************Admin_Routes_Start********************************************************************* */}
       <UserAuthContextProvider>
         <Routes>
@@ -57,7 +73,7 @@ function App() {
               <ProtectedRoute>
                 <AppHeader />
                 <container style={{ display: 'flex', }} >
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <Dashboard />
                 </container>
               </ProtectedRoute>
@@ -74,7 +90,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <AdminTransactions />
                 </container>
 
@@ -92,7 +108,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <AdminRequests/>
                 </container>
 
@@ -110,7 +126,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <EditProfile />
                 </container>
 
@@ -128,7 +144,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <AdminUsersControl/>
                 </container>
 
@@ -146,7 +162,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <AdminBill/>
                 </container>
 
@@ -164,7 +180,7 @@ function App() {
                 <AppHeader />
 
                 <container style={{ display: 'flex', }}>
-                  <AsideMenu />
+                  <AdminSideMenu />
                   <AdminRewardConfig/>
                 </container>
 
@@ -241,6 +257,24 @@ function App() {
                 <container style={{ display: 'flex', }}>
                   <SideMenu />
                   <Requests />
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/userDashboard"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <SideMenu />
+                  <UserDashboard />
                 </container>
 
               </ProtectedRoute>

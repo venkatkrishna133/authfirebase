@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Check = () => {
+const Checkadmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email").trim();
@@ -11,7 +11,7 @@ const Check = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/userform.json",
+          "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/adminform.json",
           {
             method: "GET",
             headers: {
@@ -22,21 +22,23 @@ const Check = () => {
         if (res.ok) {
           const data = await res.json();
           // Map the data to include uniqueId for each invoice
-          const userformWithUniqueId = Object.keys(data).map(uniqueId => {
+          const userformWithUniqueId = Object.keys(data).map((uniqueId) => {
             return { ...data[uniqueId], uniqueId };
           });
   
           // Filter userform array to check if email exists
-          const filteredUserForm = userformWithUniqueId.filter(user => user.uemail === email);
+          const filteredUserForm = userformWithUniqueId.filter(
+            (admin) => admin.adminEmail === email
+          );
           if (filteredUserForm.length > 0) {
-        
-            navigate(`/userDashboard?email=${email}`);
+            navigate(`/adminDashboard?email=${email}`);
+            console.log(filteredUserForm);
           } else {
-            navigate(`/details?email=${email}`);
+            navigate(`/adminDashboard?email=${email}`);
+            console.log(filteredUserForm);
           }
-  
         } else {
-          throw new Error("Failed to fetch invoices");
+          throw new Error("Failed to fetch data");
         }
       } catch (error) {
         console.error(error);
@@ -47,9 +49,10 @@ const Check = () => {
     fetchData();
   }, [navigate, email]);
   
+  
 
-  return isLoading ? <div>Loading...</div> : null;
+  return isLoading ? <div>Loading...{email}</div> : null;
 };
 
 
-export default Check;
+export default Checkadmin;

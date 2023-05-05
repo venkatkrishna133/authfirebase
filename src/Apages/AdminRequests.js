@@ -9,7 +9,7 @@ import {
 import { storage } from "../firebase";
 import { useLocation } from "react-router-dom";
 
-function AdminRequests() {
+function Requests() {
   const [invoices, setInvoices] = useState([]);
   // Define tempInvoices and setTempInvoices using useState hook
   const [tempInvoice, setTempInvoice] = useState([]);
@@ -57,7 +57,12 @@ function AdminRequests() {
     });
   }, [invoices]);
 
-
+  const handleDecline = (invoiceData) => {
+    // Access individual values from invoiceData object
+    const { email, invoiceNumber, price, date, time } = invoiceData;
+    // Perform necessary actions with the invoice data
+    console.log("Declined Invoice Data:", invoiceData);
+  };
 
   // Handler for confirm button
   const handleConfirm = async (invoiceData) => {
@@ -68,10 +73,15 @@ function AdminRequests() {
       formattedTime,
       imgurl,
       userId,
-      ammount, } = invoiceData;
+      ammount,
+      items,
+      percent,} = invoiceData;
 
     // Calculate reward
-    const reward = ammount / 10;
+    const percentage =(percent / 100);
+    console.log(percentage);
+    const reward = percentage*ammount ;
+    console.log(reward);
 
     // Create rewardData object to send in POST request
     const rewardData = {
@@ -82,6 +92,8 @@ function AdminRequests() {
       imgurl,
       userId,
       ammount,
+      items,
+      
       reward,
 
     };
@@ -157,15 +169,15 @@ function AdminRequests() {
       });
   };
 
+  const filteredInvoices = invoices.filter(invoice => Object.is(email, invoice.userId));
+
+  console.log(filteredInvoices.length);
 
   return (
-  <div style={{ marginLeft: 20, marginTop: 20 }}>
-    {invoices.length === 0 ? (
-      <div>
-        <h6 style={{ textAlign: "center" }}>No Requests available</h6>
-      </div>
-    ) : (
-      <table id="example" class="table table-striped table-hover">
+
+    <div  style={{marginLeft:20, marginTop:20}}>
+    {filteredInvoices.length > 0 ? (
+      <table id="example" class="table table-striped table-hover" >
         <thead>
           <tr>
             <th>Email</th>
@@ -180,51 +192,33 @@ function AdminRequests() {
         </thead>
         <tbody>
           {invoices.map((invoice) => {
-            return (
-              <tr key={invoice.invoiceNumber}>
-                <td>{invoice.email}</td>
-                <td>{invoice.invoiceNumber}</td>
-                <td>{invoice.formattedDate}</td>
-                <td>{invoice.formattedTime}</td>
-                <td>
-                  <Image
-                    src={invoice.imgurl}
-                    alt="Invoice"
-                    width={300}
-                  />
-                </td>
-                <td>{invoice.ammount}</td>
-                <td>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      handleDelete(invoice.uniqueId);
-                      deleteImage(invoice.imgurl);
-                    }}
-                  >
-                    Decline
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      handleConfirm(invoice);
-                      handleDelete(invoice.uniqueId);
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                </td>
-              </tr>
-            );
+            
+              return (
+                <tr key={invoice.invoiceNumber}>
+                  <td>{invoice.email}</td>
+                  <td>{invoice.invoiceNumber}</td>
+                  <td>{invoice.formattedDate}</td>
+                  <td>{invoice.formattedTime}</td>
+                  <td><Image src={invoice.imgurl} alt="Invoice" width={300} /></td>
+                  <td>{invoice.ammount}</td>
+                  <td><Button type="primary" onClick={() => { handleDelete(invoice.uniqueId); deleteImage(invoice.imgurl); }}>Decline</Button></td>
+                  <td><Button type="primary" onClick={() => { handleConfirm(invoice); handleDelete(invoice.uniqueId); }}>Confirm</Button></td>
+                </tr>
+              );
+            
           })}
         </tbody>
       </table>
+    ) : (
+      <div>
+        <h6 style={{ textAlign: 'center' }}>
+          No Requests available
+        </h6>
+      </div>
     )}
   </div>
-);
 
+  );
 }
 
-export default AdminRequests;
+export default Requests;

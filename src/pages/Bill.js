@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ref,
   uploadBytes,
@@ -18,9 +18,13 @@ function Bill() {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [userId, setuserId] = useState("");
   const [rewards, setRewards] = useState();
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [ammount, setAmount] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const [selectedReward, setSelectedReward] = useState("");
+  const items = selectedReward.split("-")[0] // Log the items value
+  const percent = selectedReward.split("-")[1]
   const [imgdetails, setImgDetails] = useState({
 
     email: "",
@@ -31,11 +35,14 @@ function Bill() {
     ammount: "",
 
 
+
+
   });
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
   const PostData = async (e) => {
     e.preventDefault();
+    console.log("Checking2.0", e.items, e.percent);
 
     const {
       email,
@@ -44,7 +51,9 @@ function Bill() {
       formattedTime,
       imgurl,
       userId,
-      ammount, } = imgdetails;
+      ammount,
+      items,
+      percent, } = imgdetails;
     // Check if checkbox is checked
     if (!checkboxChecked) {
       // Show alert message if checkbox is not checked
@@ -77,6 +86,8 @@ function Bill() {
           imgurl,
           userId,
           ammount,
+          items,
+          percent,
 
         }),
       }
@@ -84,10 +95,26 @@ function Bill() {
 
   };
   const handleCheckboxChange = (e) => {
+    // Check if fields are empty
+    if (!invoiceNumber || !userId || !ammount) {
+      // Do not check the checkbox
+      setCheckboxChecked(false);
+      // Show warning message if any field is empty
+      
+      return;
+    }
+    // Check the checkbox
     setCheckboxChecked(e.target.checked);
   };
+  
   const uploadFile = () => {
 
+      // Check if fields are empty
+      if (!invoiceNumber || !userId || !ammount) {
+        // Show warning message if any field is empty
+        alert("Please fill in all the fields!");
+        return;
+      }
 
     if (imageUpload == null) return;
     const currentDate = new Date();
@@ -96,6 +123,7 @@ function Bill() {
     console.log("Current Time:", formattedTime);
     console.log("Current Date and Time:", currentDate);
     console.log("Current Date:", formattedDate);
+
     console.log(userId);
     const imageRef = ref(storage, `images/${email} ${invoiceNumber} ${formattedDate} ${formattedTime}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
@@ -112,6 +140,9 @@ function Bill() {
           imgurl: url,
           userId: userId,
           ammount: ammount,
+          items,
+          percent,
+
 
         });
       });
@@ -187,50 +218,57 @@ function Bill() {
 
   return (
     <div className="bill" style={{ marginLeft: 20, marginTop: 20 }}>
-      <div class="container">
-        <table>
-          <tbody>
+      {isLoaded ? (
+        <div class="container">
+          <table>
+            <tbody>
 
-            <tr>
-              <td><input
-                type="file"
-                onChange={handleFileChange} // Call the handleFileChange function on file input change
-              />
-              </td>
-              <td>
-                {previewImage && <Image src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
+              <tr>
+                <td><input
+                  type="file"
+                  onChange={handleFileChange} // Call the handleFileChange function on file input change
+                />
+                </td>
+                <td>
+                  {previewImage && <Image src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
 
-              </td>
-              <td>
-                <Space.Compact style={{ width: '100%' }}>
-                  <label>Enter the Invoice NO:
-                    <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} />
-                    <br />Enter the Dealer ID:
-                    <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
-                    Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
+                </td>
+                <td>
+                  <Space.Compact style={{ width: '100%' }}>
+                    <label>Enter the Invoice NO:
+                      <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} />
+                      <br />Enter the Dealer ID:
+                      <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
+                      Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
+                      {rewards.length > 0 && (
+                        <select value={selectedReward} onChange={(e) => setSelectedReward(e.target.value)}>
+                          <option value="">Select Reward</option>
+                          {rewards.map((reward) => (
+                            <option key={reward.uniqueId} value={`${reward.items}-${reward.percent}`}>{reward.items} - {reward.percent}%</option>
+                          ))}
+                        </select>
+                      )}
+                      <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
 
-                    <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
-                    <select >
-                      {rewards.map((reward) => (
-                        <option key={reward.id} value={reward.id}>{reward.name}</option>
-                      ))}
-                    </select>
-                    <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
-                  </label>
+                      <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
+                    </label>
 
 
-                </Space.Compact>
-              </td>
-              {/* <td>
+                  </Space.Compact>
+                </td>
+                {/* <td>
                 <Space.Compact>
                   <label><Button type="primary" onClick={}>Post</Button></label>
                 </Space.Compact>
               </td> */}
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
 
-      </div>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
 
     </div>
   );
