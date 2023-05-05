@@ -40,24 +40,10 @@ function AppHeader() {
         width={40}
         src="https://yt3.ggpht.com/ytc/AMLnZu83ghQ28n1SqADR-RbI2BGYTrqqThAtJbfv9jcq=s176-c-k-c0x00ffffff-no-rj"
       ></Image>
-      <Typography.Title>{email}</Typography.Title>
+      
+      <div style={{display:'flex'}}>
+      <h4 style={{marginRight:10}}>{email}</h4>
       <Space>
-        <Badge count={comments.length} dot>
-          <MailOutlined
-            style={{ fontSize: 24 }}
-            onClick={() => {
-              setCommentsOpen(true);
-            }}
-          />
-        </Badge>
-        <Badge count={orders.length}>
-          <BellFilled
-            style={{ fontSize: 24 }}
-            onClick={() => {
-              setNotificationsOpen(true);
-            }}
-          />
-        </Badge>
         <Badge>
           <LogoutOutlined
             style={{ fontSize: 24 }}
@@ -102,6 +88,7 @@ function AppHeader() {
           }}
         ></List>
       </Drawer>
+      </div>
     </div>
   );
 }

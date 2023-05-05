@@ -11,6 +11,7 @@ function AdminRewardConfig() {
     const email = new URLSearchParams(location.search).get("email").trim();
     const [frewards, setfrewards] = useState();
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [rewardItems, setRewardItems] = useState({
         email: email,
         items: "",
@@ -37,7 +38,7 @@ function AdminRewardConfig() {
 
                     setfrewards(Object.values(userformWithUniqueId));
                     setIsLoaded(true);
-                    console.log("THis", frewards);
+                    
 
 
                 } else {
@@ -49,7 +50,7 @@ function AdminRewardConfig() {
         };
 
         fetchData();
-        
+
     }, []);
 
     const [rows, setRows] = useState([
@@ -86,6 +87,7 @@ function AdminRewardConfig() {
             ...rewardItems,
         };
         console.log(newRewardItems);
+        // const rewardItemsArray = rows.map(row => ({ items: row.items, percent: row.percent }));
         const res = await fetch(
             "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/rewards.json",
             {
@@ -95,16 +97,58 @@ function AdminRewardConfig() {
                 },
                 body: JSON.stringify(newRewardItems),
             }
+            
         );
+        window.location.reload();
         console.log(rows);
     };
 
+    const handleDelete = async (uniqueId) => {
+        console.log(uniqueId);
+
+        try {
+            // Check if the admin with uniqueId and email is present in adminsform
+            const response = await fetch(`https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/rewards.json`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+            // Map the data to include uniqueId for each user
+            const adminformWithUniqueId = Object.keys(data).map(auniqueId => {
+                return { ...data[auniqueId], auniqueId };
+            });
+            console.log(adminformWithUniqueId);
+            const rewardToDelete = adminformWithUniqueId.find((admin) => uniqueId === uniqueId);
+            console.log(rewardToDelete.auniqueId);
+
+            if (rewardToDelete) {
+                // Make DELETE request to Firebase or any other backend service
+                // You can use fetch or any other HTTP library for making DELETE request
+                await fetch(`https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/rewards/${rewardToDelete.auniqueId}.json`, {
+                    method: "DELETE",
+                });
+
+                // Remove the admin from admins
+                const updatedRewards= frewards.filter((freward) => freward.uniqueId !== uniqueId);
+                setfrewards(updatedRewards);
+                
+            } else {
+                console.error("Reward not found in rewardsform");
+            }
+        } catch (error) {
+            console.error("Failed to delete admin:", error);
+        }
+        
+
+    }
 
     return (
-        <div style={{ display: 'flex', flemarginLeft: 20, marginTop: 20 }}>
+        <div style={{ display: 'flex', marginTop: 20, justifyContent: 'space-evenly', width: "100%" }}>
             {isLoaded ? (
                 <>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" style={{ width: "30vw" }}>
                         <thead>
                             <tr>
                                 <th>S.No</th>
@@ -157,13 +201,15 @@ function AdminRewardConfig() {
                         </tfoot>
                     </table>
                     {frewards.length > 0 ? (
-                        <div style={{ marginLeft: 100 }}>
-                            <table id="example2" class="table table-striped table-hover">
+                        <div >
+                            <table id="example2" class="table table-striped table-hover" style={{ width: "50vw" }}>
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
                                         <th>Items</th>
                                         <th>Percent</th>
+                                        <th>Delete</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -172,6 +218,7 @@ function AdminRewardConfig() {
                                             <td>{index + 1}</td>
                                             <td>{freward.items}</td>
                                             <td>{freward.percent}</td>
+                                            <Button onClick={() => handleDelete(freward.uniqueId)}>Delete</Button>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -186,6 +233,12 @@ function AdminRewardConfig() {
             ) : (
                 <div>Loading...</div>
             )}
+            {isFormOpen ? (
+                <h1>hello</h1>
+            
+            ): (
+                   <></>
+                )}
         </div>
     );
 

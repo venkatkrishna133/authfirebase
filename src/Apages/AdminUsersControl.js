@@ -237,9 +237,9 @@ const AdminUsersControl = () => {
 
 
     return (
-        <div style={{ display: 'flex',flemarginLeft: 20, marginTop: 20 }}>
+        <div style={{ display: 'flex', marginTop: 20, width:"100%", justifyContent: 'space-evenly' }}>
             {users.length > 0 ? (
-                <table id="example" class="table table-striped table-hover" >
+                <table id="example" class="table table-striped table-hover" style={{width:"40vw"}}>
                     <thead>
                         <tr>
                             <th>S.No</th>
@@ -278,9 +278,9 @@ const AdminUsersControl = () => {
             )}
 
             {admins.length > 0 ? (
-                <div style={{ marginLeft: 100, }}>
+                <div style={{ marginLeft: 0, }}>
                     
-                    <table id="example2" class="table table-striped table-hover">
+                    <table id="example2" class="table table-striped table-hover" style={{width:"40vw"}}>
                     
                     <thead>
                         <tr>
