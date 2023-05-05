@@ -73,7 +73,7 @@ const Details = () => {
       }
 
     );
-    navigate(`/dashboard?email=${email}`);
+    navigate(`/userDashboard?email=${email}`);
   };
 
   return (
@@ -81,7 +81,7 @@ const Details = () => {
       <div className="container" >
         <div>
           <h3 className="position-relative">
-            Detials Form
+            Details Form
             <span
               class="position-absolute bottom-0 start-0 bg-primary"
               style={{ height: "3px", width: "50px" }}

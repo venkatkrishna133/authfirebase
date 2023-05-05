@@ -74,6 +74,7 @@ const AdminTransactions = () => {
                 <span style={{ fontWeight: 'bold' }}>Date:</span>{data.formattedDate}<br/>
                 <span style={{ fontWeight: 'bold' }}>Time:</span>{data.formattedTime}<br/>
                 <span style={{ fontWeight: 'bold' }}>Amount:</span>{data.ammount}<br/>
+                <span style={{ fontWeight: 'bold' }}>Reward:</span>{data.reward}<br/>
                 </p>
               </td>
               

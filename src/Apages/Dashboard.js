@@ -31,16 +31,13 @@ ChartJS.register(
 );
 
 function Dashboard() {
-  const [orders, setOrders] = useState(0);
+  
   const [transaction, setTransaction] = useState(0);
   const [customers, setCustomers] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
   useEffect(() => {
-    getOrders().then((data) => {
-      setOrders(data);
-      
-    });
+  
     getTransaction().then((data) => {
       setTransaction(data);
     });
@@ -79,21 +76,7 @@ function Dashboard() {
 
         <Typography.Title level={4}>Dashboard</Typography.Title>
         <Space direction="horizontal" style={{display:'flex',justifyContent:'center'}}>
-          <DashboardCard
-            icon={
-              <ShoppingOutlined
-                style={{
-                  color: "blue",
-                  backgroundColor: "rgba(0,0,255,0.25)",
-                  borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8,
-                }}
-              />
-            }
-            title={"Orders"}
-            value={orders}
-          />
+          
           <DashboardCard
             icon={
               <ShoppingCartOutlined
@@ -124,21 +107,7 @@ function Dashboard() {
             title={"Customer"}
             value={customers.length}
           />
-          <DashboardCard
-            icon={
-              <DollarCircleOutlined
-                style={{
-                  color: "red",
-                  backgroundColor: "rgba(255,0,0,0.25)",
-                  borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8,
-                }}
-              />
-            }
-            title={"Revenue"}
-            value={revenue}
-          />
+          
         </Space>
         <Space>
           <RecentOrders />

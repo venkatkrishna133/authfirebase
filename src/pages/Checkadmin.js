@@ -34,7 +34,7 @@ const Checkadmin = () => {
             navigate(`/adminDashboard?email=${email}`);
             console.log(filteredUserForm);
           } else {
-            navigate(`/adminDashboard?email=${email}`);
+            navigate(`/check?email=${email}`);
             console.log(filteredUserForm);
           }
         } else {

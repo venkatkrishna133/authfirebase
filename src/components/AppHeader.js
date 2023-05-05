@@ -36,13 +36,11 @@ function AppHeader() {
 
   return (
     <div className="AppHeader">
-      <Image
-        width={40}
-        src="https://yt3.ggpht.com/ytc/AMLnZu83ghQ28n1SqADR-RbI2BGYTrqqThAtJbfv9jcq=s176-c-k-c0x00ffffff-no-rj"
-      ></Image>
       
+      <h3 style={{justifyContent:'center',textAlign:'center',marginLeft:525}}>Loyalty Reward Application</h3>
       <div style={{display:'flex'}}>
-      <h4 style={{marginRight:10}}>{email}</h4>
+        
+      <h5 style={{marginRight:10}}>{email}</h5>
       <Space>
         <Badge>
           <LogoutOutlined

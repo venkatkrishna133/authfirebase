@@ -27,7 +27,7 @@ import {
     return (
       <div className="SideMenu">
         <Menu
-          className="SideMenuVertical"
+          className="SideMenuVertical" style={{fontSize:16,borderColor: 'red'}}
           mode="vertical"
           onClick={(item) => {
             //item.key
@@ -36,7 +36,7 @@ import {
           selectedKeys={[selectedKeys]}
           items={[
             {
-              label: "Dashbaord",
+              label: "Dashbord",
               icon: <AppstoreOutlined />,
               key: `/adminDashboard?email=${email}`,
             },

@@ -189,23 +189,7 @@ function App() {
           />
         </Routes>
       </UserAuthContextProvider>
-      <UserAuthContextProvider>
-        <Routes>
-          <Route
-
-            path="/details"
-            element={
-              <ProtectedRoute>
-                <AppHeader />
-
-
-                <Details />
-
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </UserAuthContextProvider>
+    
       
       {/* ****************************************************Admin_Routes_End*********************************************************************
  */}
