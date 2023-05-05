@@ -11,7 +11,7 @@ import {
   import { useEffect, useState } from "react";
   import { useLocation, useNavigate } from "react-router-dom";
   
-  function SideMenu() {
+  function AsideMenu() {
     const location = useLocation();
     const [selectedKeys, setSelectedKeys] = useState("/");
     
@@ -38,26 +38,36 @@ import {
             {
               label: "Dashbaord",
               icon: <AppstoreOutlined />,
-              key: `/dashboard?email=${email}`,
+              key: `/adminDashboard?email=${email}`,
             },
             {
               label: "Bill Entry",
-              key: `/bill?email=${email}`,
+              key: `/adminBill?email=${email}`,
               icon: <ShopOutlined />,
             },
             {
               label: "Transactions",
-              key: `/transactions?email=${email}`,
+              key: `/adminTransactions?email=${email}`,
               icon: <ShoppingCartOutlined />,
             },
             {
               label: "Requests",
-              key: `/requests?email=${email}`,
+              key: `/adminRequests?email=${email}`,
               icon: <BellFilled />,
             },
             {
               label: "EditProfile",
-              key: `/editProfile?email=${email}`,
+              key: `/adminEditProfile?email=${email}`,
+              icon: <EditFilled />,
+            },
+            {
+              label: "UserControl",
+              key: `/adminUsersControl?email=${email}`,
+              icon: <EditFilled />,
+            },
+            {
+              label: "RewardConfig",
+              key: `/adminRewardConfig?email=${email}`,
               icon: <EditFilled />,
             },
             
@@ -66,5 +76,5 @@ import {
       </div>
     );
   }
-  export default SideMenu;
+  export default AsideMenu;
   

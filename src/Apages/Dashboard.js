@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Card, Space, Statistic, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers, getInventory, getOrders, getRevenue } from "../API/data";
+import { getCustomers, getTransaction, getOrders, getRevenue } from "../API/data";
 
 import {
   Chart as ChartJS,
@@ -32,23 +32,44 @@ ChartJS.register(
 
 function Dashboard() {
   const [orders, setOrders] = useState(0);
-  const [inventory, setInventory] = useState(0);
+  const [transaction, setTransaction] = useState(0);
   const [customers, setCustomers] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
   useEffect(() => {
-    getOrders().then((res) => {
-      setOrders(res.total);
-      setRevenue(res.discountedTotal);
+    getOrders().then((data) => {
+      setOrders(data);
+      
     });
-    getInventory().then((res) => {
-      setInventory(res.total);
+    getTransaction().then((data) => {
+      setTransaction(data);
     });
-    getCustomers().then((res) => {
-      setCustomers(res.total);
+    getCustomers().then((data) => {
+      setCustomers(data);
     });
   }, []);
-
+  useEffect(() => {
+    getCustomers()
+      .then((data) => {
+        const customersArray = [];
+        for (const key in data) {
+          customersArray.push({ id: key, ...data[key] });
+        }
+        setCustomers(customersArray);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+  useEffect(() => {
+    getTransaction()
+      .then((data) => {
+        const transactionArray = [];
+        for (const key in data) {
+          transactionArray.push({ id: key, ...data[key] });
+        }
+        setTransaction(transactionArray);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
 
     <div style={{marginLeft:20, marginTop:20}}>
@@ -58,21 +79,6 @@ function Dashboard() {
 
         <Typography.Title level={4}>Dashboard</Typography.Title>
         <Space direction="horizontal" style={{display:'flex',justifyContent:'center'}}>
-          <DashboardCard
-            icon={
-              <ShoppingCartOutlined
-                style={{
-                  color: "green",
-                  backgroundColor: "rgba(0,255,0,0.25)",
-                  borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8,
-                }}
-              />
-            }
-            title={"Orders"}
-            value={orders}
-          />
           <DashboardCard
             icon={
               <ShoppingOutlined
@@ -85,8 +91,23 @@ function Dashboard() {
                 }}
               />
             }
-            title={"Inventory"}
-            value={inventory}
+            title={"Orders"}
+            value={orders}
+          />
+          <DashboardCard
+            icon={
+              <ShoppingCartOutlined
+                style={{
+                  color: "green",
+                  backgroundColor: "rgba(0,255,0,0.25)",
+                  borderRadius: 20,
+                  fontSize: 24,
+                  padding: 8,
+                }}
+              />
+            }
+            title={"Transaction"}
+            value={transaction.length}
           />
           <DashboardCard
             icon={
@@ -101,7 +122,7 @@ function Dashboard() {
               />
             }
             title={"Customer"}
-            value={customers}
+            value={customers.length}
           />
           <DashboardCard
             icon={

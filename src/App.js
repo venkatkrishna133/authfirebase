@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./Apages/Dashboard";
 import { Typography } from "antd";
 import SideMenu from "./components/SideMenu";
 import PageContent from "./components/PageContent";
@@ -18,6 +18,13 @@ import Bill from "./pages/Bill";
 import Transactions from "./pages/Transactions";
 import Requests from "./pages/Requests";
 import EditProfile from "./pages/EditProfile";
+import Check from "./pages/Check";
+import AsideMenu from "./components/AdminSideMenu";
+import AdminTransactions from "./Apages/AdminTransactions";
+import AdminRequests from "./Apages/AdminRequests";
+import AdminUsersControl from "./Apages/AdminUsersControl";
+import AdminBill from "./Apages/AdminBill";
+import AdminRewardConfig from "./Apages/AdminRewardConfig";
 
 
 function App() {
@@ -30,12 +37,27 @@ function App() {
       <UserAuthContextProvider>
         <Routes>
           <Route
-            path="/dashboard"
+            path="/check"
+            element={
+              <ProtectedRoute>
+
+                <Check />
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      {/* ****************************************************Admin_Routes_Start********************************************************************* */}
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminDashboard"
             element={
               <ProtectedRoute>
                 <AppHeader />
                 <container style={{ display: 'flex', }} >
-                  <SideMenu />
+                  <AsideMenu />
                   <Dashboard />
                 </container>
               </ProtectedRoute>
@@ -43,6 +65,135 @@ function App() {
           />
         </Routes>
       </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminTransactions"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <AdminTransactions />
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminRequests"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <AdminRequests/>
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminEditProfile"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <EditProfile />
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminUsersControl"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <AdminUsersControl/>
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminBill"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <AdminBill/>
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+            path="/adminRewardConfig"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+                <container style={{ display: 'flex', }}>
+                  <AsideMenu />
+                  <AdminRewardConfig/>
+                </container>
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route
+
+            path="/details"
+            element={
+              <ProtectedRoute>
+                <AppHeader />
+
+
+                <Details />
+
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </UserAuthContextProvider>
+      
+      {/* ****************************************************Admin_Routes_End*********************************************************************
+ */}
+
       <UserAuthContextProvider>
         <Routes>
           <Route
@@ -124,10 +275,9 @@ function App() {
               <ProtectedRoute>
                 <AppHeader />
 
-                <container style={{ display: 'flex', }}>
-                  <SideMenu />
-                  <Details />
-                </container>
+
+                <Details />
+
               </ProtectedRoute>
             }
           />
