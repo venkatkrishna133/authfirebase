@@ -73,10 +73,15 @@ function Requests() {
       formattedTime,
       imgurl,
       userId,
-      ammount, } = invoiceData;
+      ammount,
+      items,
+      percent,} = invoiceData;
 
     // Calculate reward
-    const reward = ammount / 10;
+    const percentage =(percent / 100);
+    console.log(percentage);
+    const reward = percentage*ammount ;
+    console.log(reward);
 
     // Create rewardData object to send in POST request
     const rewardData = {
@@ -87,6 +92,8 @@ function Requests() {
       imgurl,
       userId,
       ammount,
+      items,
+      
       reward,
 
     };
@@ -108,7 +115,7 @@ function Requests() {
       } else {
         console.error('Failed to add reward');
       }
-      window.location.reload(); 
+      // window.location.reload(); 
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
@@ -141,7 +148,7 @@ function Requests() {
       } else {
         console.error('Invoice not found in tempInvoice');
       }
-      window.location.reload(); 
+      // window.location.reload(); 
     } catch (error) {
       console.error('Failed to delete invoice:', error);
     }

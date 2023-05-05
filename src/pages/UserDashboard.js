@@ -77,7 +77,7 @@ function Dashboard() {
 
       <Space size={20} direction="vertical">
 
-        <Typography.Title level={4}>Dashboard</Typography.Title>
+        <Typography.Title level={4}>Daeeeshboard</Typography.Title>
         <Space direction="horizontal" style={{display:'flex',justifyContent:'center'}}>
           <DashboardCard
             icon={
