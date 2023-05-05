@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   ref,
   uploadBytes,
@@ -17,6 +17,8 @@ function Bill() {
   const [imageUrls, setImageUrls] = useState([]);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [userId, setuserId] = useState("");
+  const [rewards, setRewards] = useState();
+  const [isLoaded, setIsLoaded] = useState(false);
   const [ammount, setAmount] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [imgdetails, setImgDetails] = useState({
@@ -147,11 +149,48 @@ function Bill() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/rewards.json",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          // Map the data to include uniqueId for each invoice
+          const userformWithUniqueId = Object.keys(data).map(uniqueId => {
+            return { ...data[uniqueId], uniqueId };
+          });
+
+          setRewards(Object.values(userformWithUniqueId));
+          setIsLoaded(true);
+
+
+
+        } else {
+          throw new Error("Failed to fetch invoices");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
+
   return (
-    <div className="bill"  style={{marginLeft:20, marginTop:20}}>
+    <div className="bill" style={{ marginLeft: 20, marginTop: 20 }}>
       <div class="container">
         <table>
           <tbody>
+
             <tr>
               <td><input
                 type="file"
@@ -169,8 +208,13 @@ function Bill() {
                     <br />Enter the Dealer ID:
                     <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
                     Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
-                    <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
 
+                    <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
+                    <select >
+                      {rewards.map((reward) => (
+                        <option key={reward.id} value={reward.id}>{reward.name}</option>
+                      ))}
+                    </select>
                     <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
                   </label>
 

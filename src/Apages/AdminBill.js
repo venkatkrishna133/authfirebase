@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ref,
   uploadBytes,
@@ -6,7 +6,7 @@ import {
 } from "firebase/storage";
 import { useLocation } from "react-router-dom";
 import { storage } from "../firebase";
-import { v4 } from "uuid";
+
 
 import { Space, Button, Input, Image, Checkbox } from "antd";
 import imageCompression from "browser-image-compression"; // Import the image-compression library
@@ -17,6 +17,9 @@ function Bill() {
   const [imageUrls, setImageUrls] = useState([]);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [userId, setuserId] = useState("");
+  const [rewards, setRewards] = useState();
+  const [selectedReward, setSelectedReward] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
   const [ammount, setAmount] = useState("");
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [imgdetails, setImgDetails] = useState({
@@ -27,6 +30,7 @@ function Bill() {
     formattedTime: "",
     imgurl: "",
     ammount: "",
+    selectedReward: "",
 
 
   });
@@ -34,6 +38,7 @@ function Bill() {
   const email = new URLSearchParams(location.search).get("email");
   const PostData = async (e) => {
     e.preventDefault();
+    console.log("Checking2.0", e.items, e.percent);
 
     const {
       email,
@@ -42,7 +47,8 @@ function Bill() {
       formattedTime,
       imgurl,
       userId,
-      ammount, } = imgdetails;
+      ammount,
+      selectedReward, } = imgdetails;
     // Check if checkbox is checked
     if (!checkboxChecked) {
       // Show alert message if checkbox is not checked
@@ -75,6 +81,7 @@ function Bill() {
           imgurl,
           userId,
           ammount,
+          selectedReward,
 
         }),
       }
@@ -83,6 +90,7 @@ function Bill() {
   };
   const handleCheckboxChange = (e) => {
     setCheckboxChecked(e.target.checked);
+    
   };
   const uploadFile = () => {
 
@@ -94,6 +102,8 @@ function Bill() {
     console.log("Current Time:", formattedTime);
     console.log("Current Date and Time:", currentDate);
     console.log("Current Date:", formattedDate);
+    console.log(selectedReward.split("-")[0]); // Log the items value
+    console.log(selectedReward.split("-")[1]);
     console.log(userId);
     const imageRef = ref(storage, `images/${email} ${invoiceNumber} ${formattedDate} ${formattedTime}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
@@ -147,46 +157,92 @@ function Bill() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          "https://loyalty-web-app-dbc8e-default-rtdb.firebaseio.com/rewards.json",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          // Map the data to include uniqueId for each invoice
+          const userformWithUniqueId = Object.keys(data).map(uniqueId => {
+            return { ...data[uniqueId], uniqueId };
+          });
+
+          setRewards(Object.values(userformWithUniqueId));
+          setIsLoaded(true);
+
+
+
+        } else {
+          throw new Error("Failed to fetch invoices");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
+
   return (
-    <div className="bill"  style={{marginLeft:20, marginTop:20}}>
-      <div class="container">
-        <table>
-          <tbody>
-            <tr>
-              <td><input
-                type="file"
-                onChange={handleFileChange} // Call the handleFileChange function on file input change
-              />
-              </td>
-              <td>
-                {previewImage && <Image src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
+    <div className="bill" style={{ marginLeft: 20, marginTop: 20 }}>
+      {isLoaded ? (
+        <div class="container">
+          <table>
+            <tbody>
 
-              </td>
-              <td>
-                <Space.Compact style={{ width: '100%' }}>
-                  <label>Enter the Invoice NO:
-                    <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} />
-                    <br />Enter the Dealer ID:
-                    <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
-                    Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
-                    <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
+              <tr>
+                <td><input
+                  type="file"
+                  onChange={handleFileChange} // Call the handleFileChange function on file input change
+                />
+                </td>
+                <td>
+                  {previewImage && <Image src={previewImage} alt="Preview" style={{ width: 300, height: 300 }} />} {/* Render the preview image */}
 
-                    <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
-                  </label>
+                </td>
+                <td>
+                  <Space.Compact style={{ width: '100%' }}>
+                    <label>Enter the Invoice NO:
+                      <Input value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} />
+                      <br />Enter the Dealer ID:
+                      <Input value={userId} onChange={(e) => setuserId(e.target.value)} />
+                      Enter the Amount:<Input value={ammount} onChange={(e) => setAmount(e.target.value)} />
+                      <select value={selectedReward} onChange={(e) => setSelectedReward(e.target.value)}>
+                        {rewards.map((reward) => (
+                          <option key={reward.uniqueId} value={`${reward.items}-${reward.percent}`}>{reward.items} - {reward.percent}%</option>
+                        ))}
+                      </select>
+                      <Checkbox onChange={(e) => { handleCheckboxChange(e); uploadFile(); }}>Checkbox</Checkbox>
+
+                      <Button type="primary" onClick={(e) => { PostData(e); }}>Upload Image & Save</Button>
+                    </label>
 
 
-                </Space.Compact>
-              </td>
-              {/* <td>
+                  </Space.Compact>
+                </td>
+                {/* <td>
                 <Space.Compact>
                   <label><Button type="primary" onClick={}>Post</Button></label>
                 </Space.Compact>
               </td> */}
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
 
-      </div>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
 
     </div>
   );
